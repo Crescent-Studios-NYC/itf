@@ -12,6 +12,10 @@ struct The_Incredible_Time_FixerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .frame(
+                    minWidth: 700, maxWidth: 700,
+                    minHeight: 400, maxHeight: 400)
         }
+        .windowResizability(.contentSize)
     }
 }
