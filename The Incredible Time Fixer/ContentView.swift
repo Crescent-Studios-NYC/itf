@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View, DropDelegate {
     @State private var isFirstStep: Bool = true
+    @State private var isSecondStep: Bool = true
+    @State private var isThirdStep: Bool = true
     
     var body: some View {
         VStack {
@@ -34,8 +36,65 @@ struct ContentView: View, DropDelegate {
                     )
                     .onDrop(of: [(kUTTypeFileURL as String)], delegate: self)
                 }.padding(20)
-            } else {
-                /*@START_MENU_TOKEN@*/EmptyView()/*@END_MENU_TOKEN@*/
+            } else if isSecondStep {
+                VStack {
+                    Text("Now drop the rest of the photos from the same camera as the left photo")
+                        .font(.body)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .frame(width: 500)
+                    HStack(spacing: 20) {
+                        VStack {
+                            Rectangle()
+                                .cornerRadius(30)
+                                .foregroundColor(Color.black.opacity(0))
+                                .frame(width: 200, height: 260)
+                                .overlay(
+                                    Rectangle()
+                                        .stroke(Color.init(red: 0.3, green: 0.3, blue: 0.3), lineWidth: 4)
+                                )
+                            Text("filename.jpg")
+                        }
+                        VStack {
+                            Text("Drop Files Here")
+                                .fontWeight(Font.Weight.bold)
+                                .font(.title)
+                                .cornerRadius(30)
+                                .foregroundColor(Color.init(red: 0.3, green: 0.3, blue: 0.3))
+                                .frame(width: 260, height: 260)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Color.init(red: 0.3, green: 0.3, blue: 0.3), style: StrokeStyle(lineWidth: 5, dash: [10]))
+                                )
+                                .onDrop(of: [(kUTTypeFileURL as String)], delegate: self)
+                            Text(" ")
+                        }
+
+                    }.padding([.leading, .bottom, .trailing], 20)
+                }
+            } else if isThirdStep {
+                VStack{
+                    ZStack {
+                        Image(systemName: "deskclock.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120, height: 120)
+                        Image(systemName: "syringe.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                            .offset(x: 80, y: -80)
+                    }
+                    Text("Fixing time...")
+                }
+                .frame(width: 400, height: 400)
+                .padding(20)
+                .onAppear(perform: {
+                    withAnimation(Animation.spring().delay(3)) {
+                        isThirdStep = false
+                    }
+                })
             }
         }
     }
@@ -48,7 +107,14 @@ struct ContentView: View, DropDelegate {
             // Do something with the file url
             // remember to dispatch ono main in case of a @State change
             print(url)
-            isFirstStep = false
+            if (isFirstStep)
+            {
+                isFirstStep = false
+            }
+            else if (isSecondStep)
+            {
+                isSecondStep = false
+            }
         }
         
         return true
